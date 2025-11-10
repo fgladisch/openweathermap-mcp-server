@@ -12,7 +12,7 @@ export class WeatherTool {
   constructor(private readonly configService: ConfigService) {}
 
   @Tool({
-    name: "get-5-day-forecast",
+    name: "get-weather-forecast",
     description:
       "Get a 5-day weather forecast for a city using OpenWeatherMap API. Returns a daily summary (description and temperature) for each of the next 5 days.",
     parameters: z.object({
@@ -54,9 +54,9 @@ export class WeatherTool {
       template += "\n";
       template += "Temp: " + entry.main.temp + "\n";
       template += "Temp High: " + entry.main.temp_max + "\n";
-      template += "Temp Low: " + entry.main.temp_min + "\n\n";
-
-      console.log(entry.main);
+      template += "Temp Low: " + entry.main.temp_min + "\n";
+      template += "Temp feels like: " + entry.main.feels_like + "\n";
+      template += "Humidity: " + entry.main.humidity + "%\n\n";
     }
 
     return template.trim();
