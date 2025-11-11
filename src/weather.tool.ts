@@ -6,6 +6,8 @@ import z from "zod";
 
 const FORECAST_API_ENDPOINT =
   "https://api.openweathermap.org/data/2.5/forecast";
+// Only take up to 5 days (40 entries, 8 per day)
+const FORECAST_MAX_ENTRIES = 40;
 
 @Injectable()
 export class WeatherTool {
@@ -37,18 +39,17 @@ export class WeatherTool {
     const cityInfo = response.data.city;
     const forecastList = response.data.list;
 
-    // Only take up to 5 days (40 entries, 8 per day)
-    const maxEntries = 40;
-
-    const entries = forecastList.slice(0, maxEntries);
+    const entries = forecastList.slice(0, FORECAST_MAX_ENTRIES);
 
     let template = `Weather Forecast for ${cityInfo.name}:\n`;
     for (const entry of entries) {
       template += "Date & Time: " + entry.dt_txt + "\n";
       template += "Conditions: ";
       if (Array.isArray(entry.weather)) {
-        template += entry.weather
-          .map((w: any) => w.main + " " + w.description)
+        template += (
+          entry.weather as Array<{ main: string; description: string }>
+        )
+          .map((item) => `${item.main} ${item.description}`)
           .join(" ");
       }
       template += "\n";
