@@ -64,8 +64,8 @@ You can build and run the server in a Docker container using the provided `start
 
 ## Tool: get-weather-forecast
 
-- **Name:** `get-weather`
-- **Description:** Get current weather for a city using OpenWeatherMap API.
+- **Name:** `get-weather-forecast`
+- **Description:** Get current weather for a city using OpenWeatherMap API (for 5 days).
 - **Parameters:**
   - `city` (string): City name to get weather for
 
