@@ -5,7 +5,8 @@
   "scripts": {
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "build": "nest build"
+    "build": "nest build",
+    "test": "jest"
   },
   "dependencies": {
     "@cfworker/json-schema": "^4.1.1",
@@ -14,13 +15,16 @@
     "@nestjs/core": "^11.1.8",
     "@nestjs/platform-express": "^11.1.8",
     "@rekog/mcp-nest": "^1.8.4",
-    "axios": "^1.13.2",
     "zod": "^3.25.76"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.10",
+    "@nestjs/testing": "^11.1.26",
     "@types/express": "^5.0.5",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.10.0",
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
