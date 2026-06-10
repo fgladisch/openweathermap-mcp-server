@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Context, Tool } from "@rekog/mcp-nest";
-import axios from "axios";
 import z from "zod";
+import { ForecastResponse } from "./models/forecast.model";
 
 const FORECAST_API_ENDPOINT =
   "https://api.openweathermap.org/data/2.5/forecast";
@@ -28,16 +28,24 @@ export class WeatherTool {
       throw new Error("OWM_API_KEY is not set.");
     }
 
-    const response = await axios.get(FORECAST_API_ENDPOINT, {
-      params: {
-        q: city,
-        appid: apiKey,
-        units: "metric",
-      },
+    const params = new URLSearchParams({
+      q: city,
+      appid: apiKey,
+      units: "metric",
     });
+    const response = await fetch(
+      `${FORECAST_API_ENDPOINT}?${params.toString()}`,
+    );
 
-    const cityInfo = response.data.city;
-    const forecastList = response.data.list;
+    if (!response.ok) {
+      throw new Error(
+        `OpenWeatherMap API request failed with status ${response.status}.`,
+      );
+    }
+
+    const forecast = (await response.json()) as ForecastResponse;
+    const cityInfo = forecast.city;
+    const forecastList = forecast.list;
 
     const entries = forecastList.slice(0, FORECAST_MAX_ENTRIES);
 
@@ -46,9 +54,7 @@ export class WeatherTool {
       template += "Date & Time: " + entry.dt_txt + "\n";
       template += "Conditions: ";
       if (Array.isArray(entry.weather)) {
-        template += (
-          entry.weather as Array<{ main: string; description: string }>
-        )
+        template += entry.weather
           .map((item) => `${item.main} ${item.description}`)
           .join(" ");
       }
